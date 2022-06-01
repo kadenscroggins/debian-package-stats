@@ -2,6 +2,7 @@ import requests
 import sys
 import gzip
 import shutil
+import os
 
 # List of supported architectures
 allowed = ["all", "amd64", "arm64", "armel", "armhf", "i386", "mips64el", "mipsel", "ppc64el", "s390x"]
@@ -24,3 +25,7 @@ with open(file, 'wb') as f:
 with gzip.open(file, "rb") as f_in:
     with open(file_out, "wb") as f_out:
         shutil.copyfileobj(f_in, f_out)
+
+input("Execution complete. Hit enter to clear downloaded files...")
+os.remove(file)
+os.remove(file_out)
