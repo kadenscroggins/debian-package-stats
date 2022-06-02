@@ -34,11 +34,12 @@ with gzip.open(file, "rb") as f_in:
 # Get threads for multithreading support
 #threadcount = len(os.sched_getaffinity(0))
 
-lines = 0
+# Read contents file into list
+lines = []
 with open(file_out, "rb") as f_in:
     for line in f_in:
-        lines += 1
-print(lines)
+        lines.append(line)
+print(len(lines))
 
 # Delete files created during execution
 input("Execution complete. Hit enter to clear downloaded files...")
