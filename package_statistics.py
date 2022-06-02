@@ -5,7 +5,7 @@ import shutil
 import os
 
 # List of supported architectures
-allowed = ["all", "amd64", "arm64", "armel", "armhf", "i386", "mips64el", "mipsel", "ppc64el", "s390x"]
+ALLOWED = ["all", "amd64", "arm64", "armel", "armhf", "i386", "mips64el", "mipsel", "ppc64el", "s390x"]
 
 # Collect package architecture to scan
 package = ""
@@ -13,7 +13,7 @@ if len(sys.argv) > 1: package = sys.argv[1]
 else: package = input("Input contents architecture: ")
 
 # Verify package is on allowlist - won't bother trying to download nonexistent files
-if package in allowed: pass
+if package in ALLOWED: pass
 else: exit("Unknown architecture: " + package)
 
 # Assemble URL and file names from input
@@ -32,7 +32,13 @@ with gzip.open(file, "rb") as f_in:
         shutil.copyfileobj(f_in, f_out)
 
 # Get threads for multithreading support
-threadcount = len(os.sched_getaffinity(0))
+#threadcount = len(os.sched_getaffinity(0))
+
+lines = 0
+with open(file_out, "rb") as f_in:
+    for line in f_in:
+        lines += 1
+print(lines)
 
 # Delete files created during execution
 input("Execution complete. Hit enter to clear downloaded files...")
