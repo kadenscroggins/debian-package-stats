@@ -39,7 +39,7 @@ lines = []
 with open(file_out, "rb") as f_in:
     for line in f_in:
         lines.append(line)
-print(len(lines))
+print(f'Contents file length: {len(lines)} lines')
 
 # Delete files created during execution
 input("Execution complete. Hit enter to clear downloaded files...")
