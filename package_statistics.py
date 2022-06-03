@@ -24,6 +24,7 @@ file = "./contents/" + package + ".gz"
 file_out = "./contents/" + package
 
 # Get file from internet and save to disk
+if not os.path.exists('./contents'): os.makedirs('./contents')
 with open(file, 'wb') as f:
     resp = requests.get(url, verify=False)
     f.write (resp.content)
