@@ -23,7 +23,6 @@ def get_architecture():
     and checks input architecture against list of supported architectures
     defined in the ALLOWED list.
     '''
-
     if len(sys.argv) > 1:
         architecture = sys.argv[1]
     else:
@@ -107,7 +106,7 @@ def print_largest(packages_dict):
     for i, package in enumerate(largest):
         print(f'{i+1}. {package} {packages_dict.get(package)}')
 
-arch = get_architecture()           # Get architecture (ex: amd64)
+arch = get_architecture()           # Get desired architecture (ex: amd64)
 lines = get_contents_list(arch)     # Get list of lines from contents file
 packages = list_to_dict(lines)      # Count number of files assoc. with each package
 print_largest(packages)             # Print top 10 packages with most files
