@@ -23,13 +23,11 @@ url = "https://ftp.uk.debian.org/debian/dists/stable/main/Contents-" + package +
 file = "./contents/" + package + ".gz"
 file_out = "./contents/" + package
 
-# Get file from internet and save to disk
+# Get file from internet, save to disk, extract
 if not os.path.exists('./contents'): os.makedirs('./contents')
 with open(file, 'wb') as f:
     resp = requests.get(url, verify=False)
     f.write (resp.content)
-
-# Unzip archive
 with gzip.open(file, "rb") as f_in:
     with open(file_out, "wb") as f_out:
         shutil.copyfileobj(f_in, f_out)
@@ -43,10 +41,13 @@ with open(file_out, "rb") as f_in:
     for line in f_in:
         lines.append(line)
 
+# Clear downloaded files after they're done being used
+os.remove(file)
+os.remove(file_out)
+
 #print(f'Contents file length: {len(lines)} lines')
 
-# Key: package name, Value: number of files associated with package
-packages = {}
+packages = {} # Key: package name, Value: number of files associated with package
 
 # Add packages to dictionary defined above
 for line in lines:
@@ -67,8 +68,3 @@ for line in lines:
 largest = nlargest(10, packages, key = packages.get)
 for i in range(len(largest)):
     print(f'{i+1}. {largest[i]} {packages.get(largest[i])}')
-
-# Delete files created during execution
-#input('Execution complete. Hit enter to clear downloaded files...')
-os.remove(file)
-os.remove(file_out)
