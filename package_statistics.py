@@ -107,7 +107,7 @@ def print_largest(packages_dict):
     for i, package in enumerate(largest):
         print(f'{i+1}. {package} {packages_dict.get(package)}')
 
-arch = get_architecture()
-lines = get_contents_list(arch)
-packages = list_to_dict(lines)
-print_largest(packages)
+arch = get_architecture()           # Get architecture (ex: amd64)
+lines = get_contents_list(arch)     # Get list of lines from contents file
+packages = list_to_dict(lines)      # Count number of files assoc. with each package
+print_largest(packages)             # Print top 10 packages with most files
