@@ -3,6 +3,7 @@ Takes a processor architecture input, downloads the associated Contents archive,
 extracts it and counts the number of files associated with each package,
 and prints the top 10 packages with the most files to the screen
 '''
+
 import heapq
 import sys
 import gzip
@@ -27,33 +28,29 @@ else:
 
 # Assemble URL and file names from input
 url = "https://ftp.uk.debian.org/debian/dists/stable/main/Contents-" + architecture + ".gz"
-file = "./contents/" + architecture + ".gz"
-file_out = "./contents/" + architecture
+file_compressed = "./contents/" + architecture + ".gz"
+file_decompressed = "./contents/" + architecture
 
 # Get file from internet, save to disk, extract
 if not os.path.exists('./contents'):
     os.makedirs('./contents')
-with open(file, 'wb') as f:
+with open(file_compressed, 'wb') as f:
     resp = requests.get(url, verify=False)
     f.write (resp.content)
-with gzip.open(file, "rb") as f_in:
-    with open(file_out, "wb") as f_out:
+with gzip.open(file_compressed, "rb") as f_in:
+    with open(file_decompressed, "wb") as f_out:
         shutil.copyfileobj(f_in, f_out)
 
-# Get threads for multithreading support
-#threadcount = len(os.sched_getaffinity(0))
-
-# Read contents file into list and remove files on disk
+# Read contents file into list, remove files on disk
 lines = []
-with open(file_out, "rb") as f_in:
+with open(file_decompressed, "rb") as f_in:
     for line in f_in:
         lines.append(line)
-os.remove(file)
-os.remove(file_out)
+os.remove(file_compressed)
+os.remove(file_decompressed)
 
-#print(f'Contents file length: {len(lines)} lines')
-
-packages = {} # Key: package name, Value: number of files associated with package
+# Key: package name, Value: number of files associated with package
+packages = {}
 
 # Add packages to dictionary defined above
 for line in lines:
