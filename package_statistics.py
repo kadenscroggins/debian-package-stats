@@ -44,10 +44,12 @@ with open(file_out, "rb") as f_in:
 
 #print(f'Contents file length: {len(lines)} lines')
 
+# Key: package name, Value: number of files associated with package
 packages = {}
 
+# Add packages to dictionary defined above
 for line in lines:
-    line = re.sub('\A\S+\s+', '', str(line))
+    line = re.sub('\A\S+\s+', '', str(line)) # Regex to clear file name and spaces to the left of packages
     line = line.rstrip('\\n\'') # Somehow the newline gets stringified. This removes the \n'
     if ',' in line:
         line = line.split(',')
@@ -60,8 +62,8 @@ for line in lines:
         if name in packages.keys(): packages.update({name : packages.get(name) + 1})
         else: packages.update({name : 1})
 
+# Get ten largest packages from dictionary and print list
 largest = nlargest(10, packages, key = packages.get)
-
 for i in range(len(largest)):
     print(f'{i+1}. {largest[i]} {packages.get(largest[i])}')
 
