@@ -3,6 +3,7 @@ import sys
 import gzip
 import shutil
 import os
+import re
 
 # List of supported architectures
 ALLOWED = ["all", "amd64", "arm64", "armel", "armhf", "i386", "mips64el", "mipsel", "ppc64el", "s390x"]
@@ -39,9 +40,17 @@ lines = []
 with open(file_out, "rb") as f_in:
     for line in f_in:
         lines.append(line)
+
 print(f'Contents file length: {len(lines)} lines')
+for i in range(20):
+    line = re.sub('\A\S+\s+', '', str(lines[i]))
+    if ',' in line:
+        line = line.split(',')
+        for string in line: print(string)
+    else:
+        print(line)
 
 # Delete files created during execution
-input("Execution complete. Hit enter to clear downloaded files...")
+input('Execution complete. Hit enter to clear downloaded files...')
 os.remove(file)
 os.remove(file_out)
