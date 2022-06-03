@@ -16,6 +16,25 @@ import requests
 ALLOWED = ['all', 'amd64', 'arm64', 'armel', 'armhf',\
     'i386', 'mips64el', 'mipsel', 'ppc64el', 's390x']
 
+def get_architecture():
+    '''
+    Checks command line input for package architecture,
+    gets it from user input if no command line argument is passed,
+    and checks input architecture against list of supported architectures
+    defined in the ALLOWED list.
+    '''
+
+    if len(sys.argv) > 1:
+        architecture = sys.argv[1]
+    else:
+        architecture = input("Input contents architecture: ")
+    if architecture in ALLOWED:
+        pass
+    else:
+        sys.exit("Unknown architecture: " + architecture)
+
+    return architecture
+
 def get_contents_list(architecture):
     '''
     Takes string of contents architecture (ex: amd64) and downloads
@@ -78,25 +97,6 @@ def list_to_dict(lines_list):
                 packages_dict.update({name : 1})
 
     return packages_dict
-
-def get_architecture():
-    '''
-    Checks command line input for package architecture,
-    gets it from user input if no command line argument is passed,
-    and checks input architecture against list of supported architectures
-    defined in the ALLOWED list.
-    '''
-
-    if len(sys.argv) > 1:
-        architecture = sys.argv[1]
-    else:
-        architecture = input("Input contents architecture: ")
-    if architecture in ALLOWED:
-        pass
-    else:
-        sys.exit("Unknown architecture: " + architecture)
-
-    return architecture
 
 def print_largest(packages_dict):
     '''
