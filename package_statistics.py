@@ -4,6 +4,7 @@ import gzip
 import shutil
 import os
 import re
+from heapq import nlargest
 
 # List of supported architectures
 ALLOWED = ["all", "amd64", "arm64", "armel", "armhf", "i386", "mips64el", "mipsel", "ppc64el", "s390x"]
@@ -41,16 +42,30 @@ with open(file_out, "rb") as f_in:
     for line in f_in:
         lines.append(line)
 
-print(f'Contents file length: {len(lines)} lines')
-for i in range(20):
-    line = re.sub('\A\S+\s+', '', str(lines[i]))
+#print(f'Contents file length: {len(lines)} lines')
+
+packages = {}
+
+for line in lines:
+    line = re.sub('\A\S+\s+', '', str(line))
+    line = line.rstrip('\\n\'') # Somehow the newline gets stringified. This removes the \n'
     if ',' in line:
         line = line.split(',')
-        for string in line: print(string)
+        for string in line:
+            name = string.split('/')[-1]
+            if name in packages.keys(): packages.update({name : packages.get(name) + 1})
+            else: packages.update({name : 1})
     else:
-        print(line)
+        name = line.split('/')[-1]
+        if name in packages.keys(): packages.update({name : packages.get(name) + 1})
+        else: packages.update({name : 1})
+
+largest = nlargest(10, packages, key = packages.get)
+
+for i in range(len(largest)):
+    print(f'{i+1}. {largest[i]} {packages.get(largest[i])}')
 
 # Delete files created during execution
-input('Execution complete. Hit enter to clear downloaded files...')
+#input('Execution complete. Hit enter to clear downloaded files...')
 os.remove(file)
 os.remove(file_out)
