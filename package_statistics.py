@@ -84,13 +84,13 @@ def list_to_dict(lines_list):
             line = line.split(',')
             for string in line:
                 name = string.split('/')[-1]
-                if name in packages_dict.keys():
+                if name in packages_dict:
                     packages_dict.update({name : packages_dict.get(name) + 1})
                 else:
                     packages_dict.update({name : 1})
         else:
             name = line.split('/')[-1]
-            if name in packages_dict.keys():
+            if name in packages_dict:
                 packages_dict.update({name : packages_dict.get(name) + 1})
             else:
                 packages_dict.update({name : 1})
