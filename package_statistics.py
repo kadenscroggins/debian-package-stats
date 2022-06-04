@@ -4,6 +4,7 @@ extracts it and counts the number of files associated with each package,
 and prints the top 10 packages with the most files to the screen
 '''
 
+from time import process_time
 import heapq
 import sys
 import gzip
@@ -105,6 +106,49 @@ def print_largest(packages_dict):
     largest = heapq.nlargest(10, packages_dict, key = packages_dict.get)
     for i, package in enumerate(largest):
         print(f'{i+1}. {package} {packages_dict.get(package)}')
+
+def test_functions():
+    '''
+    Test get_architecture, get_contents_list, list_to_dict
+    Test internal functionality contained within print_largest
+    '''
+    time_elapsed = 0.0
+
+    # Test get_architecture
+    sys.argv[1] = 'all'
+    assert get_architecture() in ALLOWED
+    time_elapsed = process_time() - time_elapsed
+    print(f'get_architecture test passed. Time elapsed: {time_elapsed:.2f} seconds')
+
+    # Test get_contents_list
+    # Assumes ash will not be deleted from packages archive
+    test_line = 'bin/ash                                                 shells/ash'
+    test_list = get_contents_list('all')
+    assert test_line in str(test_list[0])
+    time_elapsed = process_time() - time_elapsed
+    print(f'get_contents_list test passed. Time elapsed: {time_elapsed:.2f} seconds')
+
+    # Test list_to_dict
+    # Assumes sumo-dock will not be deleted from packages archive
+    test_dict = list_to_dict(test_list)
+    assert 'sumo-doc' in test_dict
+    time_elapsed = process_time() - time_elapsed
+    print(f'list_to_dict test passed. Time elapsed: {time_elapsed:.2f} seconds')
+
+    # Test internal functionality of print_largest
+    # Assumes fonts-cns11643 will stay in the top 10 packages
+    largest = heapq.nlargest(10, test_dict, key = test_dict.get)
+    assert 'fonts-cns11643-pixmaps' in largest
+    time_elapsed = process_time() - time_elapsed
+    print(f'print_largest test passed. Time elapsed: {time_elapsed:.2f} seconds')
+
+    sys.exit(f'All tests passed. Total time elapsed: {process_time():.2f} seconds')
+
+# Ignore SSL warnings
+requests.packages.urllib3.disable_warnings()
+
+if len(sys.argv) > 1 and sys.argv[1] == "test":
+    test_functions()
 
 arch = get_architecture()           # Get desired architecture (ex: amd64)
 lines = get_contents_list(arch)     # Get list of lines from contents file
