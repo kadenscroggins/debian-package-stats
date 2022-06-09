@@ -1,5 +1,7 @@
 # Debian Package Statistics
 
+I coded this as part of a take-home assessment in an interview process.
+
 Usage: `./package_statistics.py <architecture>`
 
 This is a command line utility that outputs the top 10 packages with the most files associated with them from the debian package repository. It takes an architecture for input (`all`, `amd64`, etc) and outputs a list with the following format:
